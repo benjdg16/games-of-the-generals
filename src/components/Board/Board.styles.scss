@@ -1,0 +1,17 @@
+@import "../../utils/variables";
+
+.gg-board-container {
+	display: flex;
+	background-color: rgba(108, 108, 108, 0.2);
+	padding: calc(2 * $borderRadius);
+	border-radius: $borderRadius;
+}
+
+.gg-board {
+	background: #242424;
+	display: grid;
+	grid-template-columns: repeat($colNum, $tileSize);
+	grid-template-rows: repeat($rowNum, $tileSize);
+	grid-gap: 4px;
+	border-radius: $borderRadius;
+}
