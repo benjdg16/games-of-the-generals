@@ -7,20 +7,39 @@ import {
 } from "../../constants/common";
 
 import "./Board.styles.scss";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import DraggablePiece_Test from "../DraggablePiece_Test";
+import { BoardPiecesCtx } from "../../App";
 
 const Board = () => {
-	const boardArray = [
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[1, 1, 1, 1, 1, 1, 1, 1, 1],
-		[1, 1, 1, 1, 1, 1, 1, 1, 1],
-		[1, 1, 1, 1, 1, 1, 1, 1, 1],
-		[1, 1, 1, 1, 1, 1, 1, 1, 1],
-	];
+	// const [boardArray, setBoardArray] = useState(() => [
+	// 	[0, 0, 0, 0, 0, 0, 0, 0, 0],
+	// 	[0, 0, 0, 0, 0, 0, 0, 0, 0],
+	// 	[0, 0, 0, 0, 0, 0, 0, 0, 0],
+	// 	[0, 0, 0, 0, 0, 0, 0, 0, 0],
+	// 	[1, 1, 1, 1, 1, 1, 1, 1, 1],
+	// 	[1, 1, 1, 1, 1, 1, "G5_W", 1, 1],
+	// 	[1, 1, 1, 1, 1, 1, 1, 1, 1],
+	// 	[1, 1, 1, 1, 1, 1, 1, 1, "FLAG_W"],
+	// ]);
+
+	const mainState = useContext(BoardPiecesCtx);
+	const { boardPieces: boardArray, test } = mainState;
+
+	// useEffect(() => {
+	// 	console.log(`HEYHEHYHE`);
+	// 	console.log(boardArray);
+	// }, [boardArray]);
+
+	// useEffect(() => {
+	// 	console.log(`HEYHEHYHE`);
+	// 	console.log(mainState);
+	// }, [mainState]);
+
+	// useEffect(() => {
+	// 	console.log(`gersgserg`);
+	// 	console.log(test);
+	// }, [test]);
 
 	const renderTiles = () => {
 		// return ROWS_ARRAY.forEach((_value, rowIdx) => {
@@ -32,31 +51,48 @@ const Board = () => {
 		// });
 		return (
 			<>
-				{boardArray.map((rowValue, rowIdx) => {
-					return rowValue.map((colValue, colIdx) => {
+				{boardArray.map((rowValue: any, rowIdx: number) => {
+					return rowValue.map((colValue: any, colIdx: number) => {
 						// TODO: Refactor CSS style here
 						let borderClass = undefined;
-						if (rowIdx === 0) {
-							if (colIdx === 0) {
-								borderClass = "borderRadius-topLeft";
-							} else if (colIdx === rowValue.length - 1) {
-								borderClass = "borderRadius-topRight";
+						let childPiece = undefined;
+
+						if (typeof colValue === "number") {
+							if (rowIdx === 0) {
+								if (colIdx === 0) {
+									borderClass = "borderRadius-topLeft";
+								} else if (colIdx === rowValue.length - 1) {
+									borderClass = "borderRadius-topRight";
+								}
+							} else if (rowIdx === boardArray.length - 1) {
+								if (colIdx === 0) {
+									borderClass = "borderRadius-botLeft";
+								} else if (colIdx === rowValue.length - 1) {
+									borderClass = "borderRadius-botRight";
+								}
 							}
-						} else if (rowIdx === boardArray.length - 1) {
-							if (colIdx === 0) {
-								borderClass = "borderRadius-botLeft";
-							} else if (colIdx === rowValue.length - 1) {
-								borderClass = "borderRadius-botRight";
-							}
+						} else if (typeof colValue === "string") {
+							childPiece = (
+								<DraggablePiece_Test
+									rowIdx={rowIdx}
+									colIdx={colIdx}
+									pieceId={colValue}
+									// onDrop={() => {
+
+									// }}
+								/>
+							);
 						}
 
-						let childPiece = undefined;
-						if (rowIdx === 5 && colIdx === 5) {
-							childPiece = <DraggablePiece_Test row={rowIdx} col={colIdx} />;
-						}
+						// let childPiece = undefined;
+						// if (rowIdx === 5 && colIdx === 5) {
+						// 	childPiece = <DraggablePiece_Test row={rowIdx} col={colIdx} />;
+						// }
 
 						return (
 							<Tile
+								tileCol={colIdx}
+								tileRow={rowIdx}
 								key={`${rowIdx}${colIdx}`} // TODO: Refactor this
 								position={{
 									x: rowIdx,
@@ -65,10 +101,10 @@ const Board = () => {
 								side={colValue ? "light" : "dark"}
 								childPiece={childPiece}
 								borderClass={borderClass}
-								onDrop={(e: any) => {
-									console.log(e.dataTransfer.getData("row"));
-									e.dataTransfer.getData("col");
-								}}
+								// onDrop={(e: any) => {
+								// 	console.log(e.dataTransfer.getData("row"));
+								// 	e.dataTransfer.getData("col");
+								// }}
 							/>
 						);
 					});
@@ -76,7 +112,6 @@ const Board = () => {
 			</>
 		);
 	};
-
 	// useEffect(() => {
 	//     document.
 	// }, [])

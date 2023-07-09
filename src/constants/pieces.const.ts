@@ -3,58 +3,93 @@ interface IPieceInfo {
 	name: string;
 	rank: number;
 	quantity: number;
+	// img: string;
 	description?: string;
 }
 
-const GENERAL_FIVE: IPieceInfo = {
-	id: "gen-5",
-	name: `General of the Army`,
-	rank: 500,
+// interface IPiece {}
+export class Piece {
+	id: string;
+	name: string;
+	rank: number;
+	quantity: number;
+	img: string;
+	description?: string;
+
+	constructor({ id, name, rank, quantity, description = "" }: IPieceInfo) {
+		this.id = id;
+		this.name = name;
+		this.rank = rank;
+		this.quantity = quantity;
+		this.img = `/src/assets/svg/pieces/${id}.svg`;
+		this.description = description;
+	}
+}
+
+const G5_W = new Piece({
+	id: "G5_W",
+	name: `General`,
+	rank: 505,
 	quantity: 1,
 	description: `Eliminates any lower-ranking officer, the Private, and the Flag.`,
-};
+});
 
-const COLONEL: IPieceInfo = {
-	id: "col",
-	name: `Colonel`,
-	rank: 400,
+const G4_W = new Piece({
+	id: "G4_W",
+	name: `General`,
+	rank: 504,
 	quantity: 1,
 	description: `Eliminates any lower-ranking officer, the Private, and the Flag.`,
-};
+});
 
-const CAPTAIN: IPieceInfo = {
-	id: "capt",
-	name: `Captain`,
-	rank: 300,
+const G3_W = new Piece({
+	id: "G3_W",
+	name: `General`,
+	rank: 503,
 	quantity: 1,
-};
+	description: `Eliminates any lower-ranking officer, the Private, and the Flag.`,
+});
 
-const SERGEANT: IPieceInfo = {
-	id: "sgt",
-	name: `Sergeant`,
-	rank: 200,
+const G2_W = new Piece({
+	id: "G2_W",
+	name: `General`,
+	rank: 502,
 	quantity: 1,
-};
+	description: `Eliminates any lower-ranking officer, the Private, and the Flag.`,
+});
 
-const PRIVATE: IPieceInfo = {
-	id: "pvt",
+const G1_W = new Piece({
+	id: "G1_W",
+	name: `General`,
+	rank: 501,
+	quantity: 1,
+	description: `Eliminates any lower-ranking officer, the Private, and the Flag.`,
+});
+
+const PVT_W = new Piece({
+	id: "PVT_W",
 	name: `Private`,
-	rank: 100,
+	rank: 1,
 	quantity: 6,
-};
+	description: `Eliminates the Spy, and the Flag.`,
+});
 
-const SPY: IPieceInfo = {
-	id: "spy",
-	name: `Spy`,
-	rank: -500,
-	quantity: 2,
-};
-
-const FLAG: IPieceInfo = {
-	id: "flag",
+const FLAG_W = new Piece({
+	id: "FLAG_W",
 	name: `Flag`,
 	rank: 0,
 	quantity: 1,
+	description: `Eliminates the opposing Flag as long as it takes the aggressive action against the enemy Flag.`,
+});
+
+const WHITE_PIECES: { [k: string]: Piece } = {
+	G5_W,
+	G4_W,
+	G3_W,
+	G2_W,
+	G1_W,
+	PVT_W,
+	FLAG_W,
 };
 
-export { GENERAL_FIVE, COLONEL, CAPTAIN, SERGEANT, PRIVATE, SPY, FLAG };
+export { WHITE_PIECES };
