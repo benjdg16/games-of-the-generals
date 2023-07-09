@@ -10,9 +10,10 @@ interface ITile {
 	side: string;
 	childPiece?: React.ReactNode;
 	borderClass?: string;
+	onDrop: any;
 }
 
-const Tile = ({ position, side, childPiece, borderClass }: ITile) => {
+const Tile = ({ position, side, childPiece, borderClass, onDrop }: ITile) => {
 	const handleTileClick = () => {
 		console.log(position);
 	};
@@ -21,6 +22,14 @@ const Tile = ({ position, side, childPiece, borderClass }: ITile) => {
 		<div
 			className={`gg-tile ${side} ${borderClass ?? ""}`}
 			onClick={handleTileClick}
+			onDrop={() => {
+				console.log(`onDrop`);
+			}}
+			onDragOver={(e: any) => {
+				e.stopPropagation();
+				e.preventDefault();
+				// console.log(`gserg`);
+			}}
 		>
 			{childPiece}
 		</div>

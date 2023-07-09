@@ -52,7 +52,7 @@ const Board = () => {
 
 						let childPiece = undefined;
 						if (rowIdx === 5 && colIdx === 5) {
-							childPiece = <DraggablePiece_Test />;
+							childPiece = <DraggablePiece_Test row={rowIdx} col={colIdx} />;
 						}
 
 						return (
@@ -65,6 +65,10 @@ const Board = () => {
 								side={colValue ? "light" : "dark"}
 								childPiece={childPiece}
 								borderClass={borderClass}
+								onDrop={(e: any) => {
+									console.log(e.dataTransfer.getData("row"));
+									e.dataTransfer.getData("col");
+								}}
 							/>
 						);
 					});
@@ -78,7 +82,7 @@ const Board = () => {
 	// }, [])
 
 	return (
-		<div className="gg-board-container">
+		<div className="gg-board-container gg-grid-item">
 			<div className="gg-board">{renderTiles()}</div>
 		</div>
 	);

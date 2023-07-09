@@ -5,6 +5,17 @@
 	text-align: center;
 }
 
-// .gg-board-container {
-// 	background-image: linear-gradient(to right, #434343 0%, black 100%);
+// .gg-app {
+// 	display: grid;
+// 	grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+// 	// grid-template-columns: 100%;
+
+// 	.gg-grid-item {
+// 		// grid-area: 3 / 1 / -1 / -1;
+// 	}
 // }
+
+.gg-app {
+	display: flex;
+	gap: 48px;
+}
