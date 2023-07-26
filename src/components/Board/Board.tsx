@@ -8,8 +8,10 @@ import {
 
 import "./Board.styles.scss";
 import { useContext, useEffect, useState } from "react";
-import DraggablePiece_Test from "../DraggablePiece_Test";
+// import DraggablePiece_Test from "../DraggablePiece_Test";
 import { BoardPiecesCtx } from "../../App";
+import DraggablePiece from "../DraggablePiece/DraggablePiece";
+import { AppContext } from "../../context";
 
 const Board = () => {
 	// const [boardArray, setBoardArray] = useState(() => [
@@ -23,13 +25,13 @@ const Board = () => {
 	// 	[1, 1, 1, 1, 1, 1, 1, 1, "FLAG_W"],
 	// ]);
 
-	const mainState = useContext(BoardPiecesCtx);
-	const { boardPieces: boardArray, test } = mainState;
+	const mainState = useContext(AppContext);
+	const { boardPieces: boardArray } = mainState;
 
-	// useEffect(() => {
-	// 	console.log(`HEYHEHYHE`);
-	// 	console.log(boardArray);
-	// }, [boardArray]);
+	useEffect(() => {
+		console.log(`Board`);
+		console.log(boardArray);
+	}, [boardArray]);
 
 	// useEffect(() => {
 	// 	console.log(`HEYHEHYHE`);
@@ -73,13 +75,12 @@ const Board = () => {
 							}
 						} else if (typeof colValue === "string") {
 							childPiece = (
-								<DraggablePiece_Test
-									rowIdx={rowIdx}
-									colIdx={colIdx}
+								<DraggablePiece
 									pieceId={colValue}
-									// onDrop={() => {
-
-									// }}
+									position={{
+										row: rowIdx,
+										column: colIdx,
+									}}
 								/>
 							);
 						}
@@ -95,16 +96,12 @@ const Board = () => {
 								tileRow={rowIdx}
 								key={`${rowIdx}${colIdx}`} // TODO: Refactor this
 								position={{
-									x: rowIdx,
-									y: colIdx,
+									row: rowIdx,
+									column: colIdx,
 								}}
 								side={colValue ? "light" : "dark"}
 								childPiece={childPiece}
 								borderClass={borderClass}
-								// onDrop={(e: any) => {
-								// 	console.log(e.dataTransfer.getData("row"));
-								// 	e.dataTransfer.getData("col");
-								// }}
 							/>
 						);
 					});

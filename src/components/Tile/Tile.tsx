@@ -1,11 +1,10 @@
 import { useContext, useRef, useEffect, useState } from "react";
 import "./Tile.styles.scss";
 import { BoardPiecesCtx, TBoardPieces } from "../../App";
-
-type TPosition = {
-	x: number;
-	y: number;
-};
+import { useDispatch } from "react-redux";
+import { TPosition } from "../../types/common.types";
+import { MOVE_INFO } from "../../constants/common";
+import { AppContext } from "../../context";
 
 interface ITile {
 	position: TPosition;
@@ -25,117 +24,87 @@ const Tile = ({
 	tileRow,
 	tileCol,
 }: ITile) => {
-	const mainState = useContext(BoardPiecesCtx);
-	const { boardPieces, setBoardPieces, test, setTest } = mainState;
+	const gameState = useContext(AppContext);
+	const { boardPieces, setBoardPieces, sample, setSample } = gameState;
 
-	const tileRef = useRef<HTMLDivElement>(null);
-
-	interface moveInfo {
-		rowIdx: number;
-		colIdx: number;
-		pieceId: string;
-	}
-
-	// useEffect(() => {
-	// 	console.log(test);
-	// }, [test]);
-
-	const handleTileClick = () => {
-		// console.log(position);
-		if (setTest) setTest(position);
+	const onClickHandler = (e: any) => {
+		console.log(`onClick`);
 	};
-	useEffect(() => {
-		// console.log(`%cBOARDPIECES CHANGED`, "color: green");
-		// console.log(boardPieces);
-	}, [boardPieces]);
-
-	const x = useRef<any>(null);
-
-	useEffect(() => {
-		// console.log(`%cRERENDEr`, "color: red");
-	});
-
-	const [internalState, setInternalState] = useState<TBoardPieces>([]);
 
 	// useEffect(() => {
-	// 	// console.log(`hello`);
-	// 	if (setBoardPieces && internalState.length > 0)
-	// 		setBoardPieces(internalState);
-	// }, [internalState]);
+	// 	console.log(`tile`);
+	// }, [boardPieces]);
 
-	const moveHandler = (e: any) => {
-		e.preventDefault();
+	// useEffect(() => {
+	// 	console.log(`tile - sample`);
+	// 	console.log(sample);
+	// }, [sample]);
 
-		// e.stopImmediatePropagation();
-		// e.stopPropagation();
-		// e.preventDefault();
+	const onDropHandler = (e: any) => {
 		console.log(e);
-		// const toPos = boardPieces[rowIdx][colIdx];
-
-		const moveInfo = e.dataTransfer.getData("moveInfo");
+		e.preventDefault();
+		const moveInfo = e.dataTransfer.getData(MOVE_INFO);
 		const moveInfoParse = JSON.parse(moveInfo);
-		const { rowIdx, colIdx, pieceId } = moveInfoParse;
+		const { pieceId, position } = moveInfoParse;
+		const { row, column } = position;
 
 		if (setBoardPieces) {
 			const _boardPieces = boardPieces;
-			// const oldToValue = _boardPieces[tileRow][tileCol];
 			_boardPieces[tileRow][tileCol] = pieceId;
-			if (rowIdx > 3) {
-				_boardPieces[rowIdx][colIdx] = 1;
+
+			if (row > 3) {
+				_boardPieces[row][column] = 1;
 			} else {
-				_boardPieces[rowIdx][colIdx] = 0;
+				_boardPieces[row][column] = 0;
 			}
-			console.log(_boardPieces);
-			// setTest("drag");
+			setSample && setSample(new Date());
 			setBoardPieces(_boardPieces);
-			// setInternalState(_boardPieces);
-			// x.current = _boardPieces;
-			// console.log(x.current);
 		}
+		console.log(`onDrop`);
 	};
 
-	const onDragEndHandler = () => {
-		// console.log(x.current);
-		// console.log(2);
-		// if (setBoardPieces) setBoardPieces(x.current);
-		// if (setTest) setTest(4);
+	const preventHandler = (e: any) => {
+		e.preventDefault();
+		e.stopPropagation();
 	};
+
+	// const onDragStartHandler = (e: any) => {
+	// 	console.log(`dragStart`);
+	// 	e.preventDefault();
+	// 	console.log(e);
+	// 	// const moveInfo: IMoveInfo = {
+	// 	// 	pieceId,
+	// 	// 	position: {
+	// 	// 		row,
+	// 	// 		column,
+	// 	// 	},
+	// 	// };
+	// 	// const moveInfoJSON = JSON.stringify(moveInfo);
+	// 	// e.dataTransfer.setData(MOVE_INFO, moveInfoJSON);
+	// };
 
 	return (
 		<div
 			data-row={tileRow}
 			data-col={tileCol}
-			ref={tileRef}
 			className={`gg-tile ${side} ${borderClass ?? ""}`}
-			onClick={handleTileClick}
-			// onDragEnd={() => onDragEndHandler()}
-			onDrop={moveHandler}
-			onDragEnter={(e: any) => {
-				e.preventDefault();
-				e.stopPropagation();
-			}}
-			onDragOver={(e: any) => {
-				e.preventDefault();
-				e.stopPropagation();
-				// console.log(`gserg`);
-			}}
-			onDragLeave={(e: any) => {
-				e.preventDefault();
-				e.stopPropagation();
-			}}
-			// onMouseEnter={(e: any) => {
-			// 	console.log(e.target);
-
-			// 	console.log(tileRef.current);
-			// 	const element = e.target as Element;
-
-			// 	const computed = window
-			// 		.getComputedStyle(element)
-			// 		.getPropertyValue("width");
-
-			// 	console.log(computed);
+			onClick={onClickHandler}
+			// onDragStart={onDragStartHandler}
+			onDrop={onDropHandler}
+			// onDragEnter={(e: any) => {
+			// 	e.stopPropagation();
+			// 	e.preventDefault();
 			// }}
-			draggable={true}
+			onDragOver={(e: any) => {
+				// e.stopPropagation();
+				e.preventDefault();
+				e.dataTransfer.dropEffect = "move";
+			}}
+			// onDragLeave={preventHandler}
+			// onDragEnd={() => {
+			// 	console.log(`onDragEnd`);
+			// }}
+			// draggable={true}
 		>
 			{childPiece}
 		</div>

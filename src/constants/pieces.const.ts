@@ -8,12 +8,18 @@ interface IPieceInfo {
 }
 
 // interface IPiece {}
+
+type TPosition = {
+	row: number | null;
+	col: number | null;
+};
 export class Piece {
 	id: string;
 	name: string;
 	rank: number;
 	quantity: number;
 	img: string;
+	position?: TPosition;
 	description?: string;
 
 	constructor({ id, name, rank, quantity, description = "" }: IPieceInfo) {

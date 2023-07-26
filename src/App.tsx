@@ -18,9 +18,11 @@ export interface IDefaultState {
 	setBoardPieces?: Dispatch<SetStateAction<TBoardPieces>>;
 	test?: string;
 	setTest?: Dispatch<SetStateAction<any>>;
+	activePiece?: any;
+	setActivePiece?: Dispatch<SetStateAction<any>>;
 }
 
-const defaultState: IDefaultState = {
+const defaultState: IDefaultState | null = {
 	boardPieces: [],
 };
 
@@ -39,12 +41,15 @@ function App() {
 	]);
 
 	const [test, setTest] = useState<any>("fwef");
+	const [activePiece, setActivePiece] = useState<any>();
 
 	const defaultState: IDefaultState = {
 		boardPieces: boardPieces,
 		setBoardPieces: setBoardPieces,
 		test: test,
 		setTest,
+		activePiece,
+		setActivePiece,
 	};
 
 	// useEffect(() => {
@@ -55,12 +60,10 @@ function App() {
 	// const BoardPiecesCtx = createContext(defaultState);
 
 	return (
-		<BoardPiecesCtx.Provider value={defaultState}>
-			<div className="gg-app">
-				<Board />
-				{/* <RightPanel /> */}
-			</div>
-		</BoardPiecesCtx.Provider>
+		<div className="gg-app">
+			<Board />
+			{/* <RightPanel /> */}
+		</div>
 	);
 }
 
